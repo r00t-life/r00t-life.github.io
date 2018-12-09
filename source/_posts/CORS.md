@@ -19,7 +19,17 @@ tags:
  - 使用样式表(使用CSSOM)
  - 引用外部资源
 
-    ```<script src="...">, <img src="...">, <video src="...">, <embed src="..."> <frame src="...">, <iframr src="...">, <link rel="stylesheet" href="...">, <applet code="...">, <object data="...">```
+    ```
+    <script src="..."> 
+    <img src="...">
+    <video src="...">
+    <embed src="...">
+    <frame src="...">
+    <iframr src="...">
+    <link rel="stylesheet" href="...">
+    <applet code="...">
+    <object data="...">
+    ```
 ## 功能描述
 
     跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。另外，规范要求，对那些可能对服务器数据产生副作用的 HTTP 请求方法（特别是 GET 以外的 HTTP 请求，或者搭配某些 MIME 类型的 POST 请求），浏览器必须首先使用 OPTIONS 方法发起一个预检请求（preflight request），从而获知服务端是否允许该跨域请求。服务器确认允许之后，才发起实际的 HTTP 请求。在预检请求的返回中，服务器端也可以通知客户端，是否需要携带身份凭证（包括 Cookies 和 HTTP 认证相关数据）
