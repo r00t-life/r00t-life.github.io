@@ -17,6 +17,14 @@ root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
+#Content
+excerpt_link: more
+show_all_link: 'show all'
+
+#smart_menu:
+smart_menu:
+    innerArchive: 'All Archive'
+
 # Directory
 source_dir: source
 public_dir: public
@@ -78,5 +86,24 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/devi1ex/devi1ex.github.io.git
+  repo: git@github.com:devi1ex/devi1ex.github.io.git
   branch: master
+
+jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: false
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
