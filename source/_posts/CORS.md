@@ -262,3 +262,8 @@ echo "secret";
 </script>
 ```
 上面配置了一个白名单域名`foo.example`，这样就允许了`foo.example`跨域访问`a.com`，如果配置错误了，将`Access-Control-Allow-Origin`设置为`*`，那么任何人都可以跨域访问到`a.com`的资源。如果服务端把`Access-Control-Allow-Credentials`设置为`true`，允许客户端带上cookie，那么攻击者很容易能够获得用户的数据，如果这样配置了那么浏览器会阻止数据返回。
+
+## 参考链接
+https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS
+
+https://www.anquanke.com/post/id/97671
