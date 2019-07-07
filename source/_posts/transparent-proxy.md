@@ -1,10 +1,9 @@
 ---
-title: transparent-proxy
+title: 使用openwrt搭建上网网关
 date: 2019-07-07 10:23:21
 tags: ssr, iptables, openwrt, proxy
 ---
 
-## 使用openwrt搭建上网网关
 
 前阵子买了一个openwrt路由器，就捣鼓了一下，使用`ssr + chinadns + dnsmasq + iptables`搭建上网代理，这里简单记录一下
 

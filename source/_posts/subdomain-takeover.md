@@ -1,10 +1,9 @@
 ---
-title: subdomain takeover
+title: 子域名接管漏洞
 date: 2018-12-14 05:43:49
 tags: dns sec
 ---
 
-# 子域名接管漏洞
 
 ### CNAME子域名接管
 这个漏洞的成因，主要是因为域名（源域名）配置了CNAME，但是CNAME指向的域名并没有被注册。那么攻击者可以注册这个CNAME指向的域名，就可以控制了源域名

@@ -1,10 +1,9 @@
 ---
-title: vs-IronPython
+title: VS安装ironPython环境
 date: 2019-01-20 14:02:27
 tags: IronPython
 ---
 
-## VS配置IronPython环境
 
 1. 安装[PTVS](https://github.com/Microsoft/PTVS)
 2. 安装[IronPython](http://ironpython.net/)

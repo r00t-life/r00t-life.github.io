@@ -1,10 +1,10 @@
 ---
-title: javascript prototype
+title: JAVASCRIPT 原型链污染
 date: 2018-12-12 04:09:27
 tags: javascript
 ---
 
-## 原型和原型链
+### 原型和原型链
 
 当查找一个对象的时候，Javascript会向上遍历原型链(`prototype chain`)，直到找到给定名称的属性为止，查找到原型链的顶部，也就是`Object.prototype`，如果这个时候还是没有找到，那么就会返回`undefined`。例子如下：
 ```
