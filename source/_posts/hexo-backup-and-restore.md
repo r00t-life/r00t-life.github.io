@@ -23,10 +23,12 @@ sudo npm install hexp-cli -g
 npm install hexo-deployer-git --save
 ```
 
-5.最后生成内容
+5.生成内容以及发布
 ```
 hexo new "blog title"
 git add .
 git commit -m "something"
 git push origin hexo
+
+hexo g -d
 ```
