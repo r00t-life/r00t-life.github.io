@@ -8,9 +8,9 @@ tags: ssr, iptables, openwrt, proxy
 
 前阵子买了一个openwrt路由器，就捣鼓了一下，使用`ssr + chinadns + dnsmasq + iptables`搭建上网代理，这里简单记录一下
 
-1. 配置ssr-redir
+1.配置ssr-redir
 
-2. 配置chinadns
+2.配置chinadns
     ```
     chinadns -c chnroute.txt -p 5353
     curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > chnroute.txt
@@ -18,14 +18,14 @@ tags: ssr, iptables, openwrt, proxy
     0 0 * * 0 command
     ```
 
-3. dnsmasq配置
+3.dnsmasq配置
     ```
     vim /etc/dnsmasq.d/dnsmasq.conf
     no-resolv
     server=127.0.0.1#5353
     ```
 
-4. iptables
+4.iptables
     ```
     #!/bin/bash
     iptables -t nat -N SS
