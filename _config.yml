@@ -91,7 +91,7 @@ theme: yilia
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:r00t-life/r00t.github.io.git
+  repo: git@github.com:r00t-life/r00t-life.github.io.git
   branch: master
 
 jsonContent:
