@@ -10,24 +10,24 @@ tags: mimikatz, adsec
 crypto模块提供与Windows加密功能(CryptoAPI)接合的功能，主要用来导出那些没有被标记为“可导出”的证书
 
 ##### crypto::capi 给CryptoAPI打补丁，方便导出证书
-![](../img/crypto.capi.png)
+![](/img/crypto.capi.png)
 
 ##### crypto::certificates 列出/导出证书
 通常需要先执行`privilege::debug`提升权限
 - /systemstore	-	可选	-	系统默认使用的证书存储类型（default:CERT_SYSTEM_STORE_CURRENT_USER）
 - /store	-	可选	-	用于列出/导出证书（默认为:My)
 - /export	-	可选	-	用于导出证书到文件
-![](../img/crypto.cer.png)
+![](/img/crypto.cer.png)
 - `crypto::stores`列出可用的`systemstore`和`store`参数的可用值
 - 不可导出的key在导出的时候会出现错误信息（KO - ERROR kuhl_m_crypto_exportCert ; Export / CreateFile (0x8009000b)），可以使用`crypto::capi, crypto::cng`来进行补丁，通常可以导出，但是也需要相应的权限，比如UAC
 
 ##### crypto::cng	给CNG服务打补丁，方便导出证书（补丁Keylso服务）
 ##### crypto::hash	对密码进行HASH操作
-![](../img/crypto.hash.png)
+![](/img/crypto.hash.png)
 ##### crypto::keys	列出/导出密钥的容器
-![](../img/crypto.keys.png)
+![](/img/crypto.keys.png)
 ##### crypto::providers	列出加密提供商
-![](../img/crypto.providers.png)
+![](/img/crypto.providers.png)
 ##### crypto::stores		列出加密存储类型
 /systemstore	-	可选	-	系统默认使用的证书存储类
 store可用值:
@@ -59,12 +59,12 @@ CERT_SYSTEM_STORE_SERVICES or SERVICES
 ### 3.EVENT模块
 1.EVENT::CLEAR	清除事件日志
 2.EVENT::DROP	给事件记录服务打补丁，从而避免产生新的事件
-![](../img/event.png)
+![](/img/event.png)
 
 ### 4.KERBEROS模块
 KERBEROS模块用于与微软的KerberosAPI进行交互，执行该模块不需要特殊的权限
 ##### KERBEROS::ASK	请求TGS票据
-![](../img/kerberos.ask.png)
+![](/img/kerberos.ask.png)
 ##### KERBEROS::CLIST	列出在MIT/HEIMDALL缓存中的票据
 ##### KERBEROS::GOLDEN	创建黄金票据/白银票据/信任票据
 该命令的功能是基于检索到的密码的hash类型类执行的
@@ -105,7 +105,7 @@ KERBEROS模块用于与微软的KerberosAPI进行交互，执行该模块不需�
 ```
 kerberos::golden /admin:ADMIINACCOUNTNAME /domain:DOMAINFQDN /id:ACCOUNTRID /sid:DOMAINSID /krbtgt:KRBTGTPASSWORDHASH /ptt
 ```
-![](../img/kerberos.godlen.jpg)
+![](/img/kerberos.godlen.jpg)
 
 ##### 白银票据
 白银票据是一个TGS（和TGT的格式类似），使用了目标服务账户（由SPN映射标识）的NTLM密码HASH来进行加密和签名，mimikatz使用`kerberos::golden`来创建一个白银票据，白银票据创建的是TGS服务，只能访问有限的服务。
@@ -124,7 +124,7 @@ kerberos::golden /admin:ADMIINACCOUNTNAME /domain:DOMAINFQDN /id:ACCOUNTRID /sid
 ```
 mimikatz “kerberos::golden /admin:LukeSkywalker /id:1106 /domain:lab.adsecurity.org /sid:S-1-5-21-1473643419-774954089-2222329127 /target:adsmswin2k8r2.lab.adsecurity.org /rc4:d7e2b80507ea074ad59f152a1ba20458 /service:cifs /ptt” exit
 ```
-![](../img/silver.jpg)
+![](/img/silver.jpg)
 
 #### 信任票据
 一旦AD的信任密码HASH确定后，一个信任票据就会被创建（Mimikatz “privilege::debug” “lsadump::trust /patch” exit）
@@ -135,7 +135,7 @@ mimikatz “kerberos::golden /admin:LukeSkywalker /id:1106 /domain:lab.adsecurit
 ```
 mimikatz "privilege::debug" "lsadump::trust /patch" exit
 ```
-![](../img/trust1.jpg)
+![](/img/trust1.jpg)
 
 步骤2：使用Mimikatz创建一个伪造的受信任票据（跨域TGT）
 伪造票据说明了该票据的持有者为AD林中的Enterprise Admin，拥有从子域到父域的完全访问权限。值得注意的是该伪造的用户不存在于任何计算机上，因为使用了黄金票据来得到域的信任，mimikatz使用`kerberos::golden`来创建一个信任票据。
@@ -157,17 +157,17 @@ Mimikatz “kerberos::golden /domain:child.adsec.lab /sid:S-1-5-21-1420805320-14
 SIDS是父域的Enterprise Admin SID，SID是当前域的SID，NTLM HASH是父域的rc4,使用lsadump::trust /patch可以得到
 注：使用SIDS参数会创建一个信任票据，从而告诉目标域，该信任票据的持有者是一个Enterprise Admin成员
 ```
-![](../img/trust2.jpg)
+![](/img/trust2.jpg)
 
 步骤3：使用步骤2创建的信任票据去获得目标域上目标服务的TGS，并保存TGS到文件
 结果是TGS给EA提供了访问父（根）域的域控制器上的CIFS服务的权限
-![](../img/kekeo1.jpg)
+![](/img/kekeo1.jpg)
 
 步骤4：把步骤3生成的TGS文件注入，以获得相应的权限去访问目标服务
 注入前：
-![](../img/kekeo3.jpg)
+![](/img/kekeo3.jpg)
 注入后：
-![](../img/kekeo2.jpg)
+![](/img/kekeo2.jpg)
 
 
 ##### KERBEROS::Hash	-	把密码hash成密钥
@@ -176,7 +176,7 @@ SIDS是父域的Enterprise Admin SID，SID是当前域的SID，NTLM HASH是父�
 - /export	-	导出用户的票据到文件
 
 使用`SEKURLSA::TICKETS`命令把当前系统上所有已验证用户的kerberos票据dump下来。有些情况下用户的证书不会导出，这时候需要运行`SEKURLSA::TICKETS /EXPORT`,需要相应的权限。
-![](../img/kerberos.list.jpg)
+![](/img/kerberos.list.jpg)
 
 ##### KERBEROS::PTC		-	传递缓存（NT6）
 *Nix类的系统，都会缓存kerberos凭证，这些缓存的数据可以使用mimikatz来进行拷贝和传递，同样对把Kerberos票据注入到缓存文件中也很有帮助。一个例子就是利用MS14068的漏洞，使用pykeke生成一个缓存文件，然后使用mimikatz的kerberos:ptc命令注入。
@@ -192,23 +192,23 @@ SIDS是父域的Enterprise Admin SID，SID是当前域的SID，NTLM HASH是父�
 "kerberos::golden /admin:deadfk /domain:child.adsec.lab /id:8888 /sid:S-1-5-21-1420805320-1455282633-3118636415 /krbtgt:a2ba962ef41bb5e9635c2ae3173ee8a3 /ticket:deadfk.kribi" exit
 ```
 再使用ptt来注入
-![](../img/kerberos.ptt.jpg)
+![](/img/kerberos.ptt.jpg)
 
 ##### KERBEROS::PURGE	清除当前会话中的所有kerberos票据
 
 ##### KERBEROS::TGT		获得当前用户的TGT
-![](../img/kerberos.tgt.jpg)
+![](/img/kerberos.tgt.jpg)
 
 ### 5.LSADUMP
 LSADUMP模块通过与Windows本地安全验证机构（LSA）进行交互获得凭证信息。该模块的大多数命令都需要`debug`权限或者本地管理员权限，一般管理员组都有`debug`权限，必须要用户手动输入`privilege::debug`才能进行提权.
 
 ##### LSADUMP::BACKUPKEYS
 要求管理员权限
-![](../img/lsadump.backupkeys.jpg)
+![](/img/lsadump.backupkeys.jpg)
 
 ##### LSADUMP::CACHE	-	获取Syskey用来解密NL$KM AND MSCACHE(V2)(从注册表或者hives文件中获取)
 需要管理员权限
-![](../img/lsadump.cache.jpg)
+![](/img/lsadump.cache.jpg)
 
 ##### LSADUMP::DCSYNC	-	向DC发起一个同步对象请求(获取账户密码数据)
 要运行该命令,需要一些指定的权限:管理员组,域管理员组,企业管理员组成员以及域控制器的计算机账户都可以通过DCSync把密码读取出来.需要注意的是被设置只读属性的域控制器是无法把密码读取出来的。
@@ -228,7 +228,7 @@ DCSync参数选项
 从child.adsec.lab域取回jane用户的密码
 Mimikatz “privilege::debug” “lsadump::dcsync /domain:child.adsec.lab /user:jane” exit
 ```
-![](../img/lsadump.dcsync.jpg)
+![](/img/lsadump.dcsync.jpg)
 
 ##### LSADUMP::LSA	-	从LSA服务中导出活动目录中的凭证信息，也可以导出指定用户的凭证
 要求system或者debug权限
@@ -239,9 +239,9 @@ Mimikatz “privilege::debug” “lsadump::dcsync /domain:child.adsec.lab /user
 
 `mimikatz "lsadump::lsa /inject" exit`
 该命令如果在DC上运行，会导出整个活动目录的凭证信息，RID 502的是KRBTGT用户，RID 500的是默认域管理员账户
-![](../img/lsadump.lsa1.jpg)
+![](/img/lsadump.lsa1.jpg)
 `lsadump::lsa /patch`只会导出活动目录里的NTLM HASH
-![](../img/lsadump.lsa2.jpg)
+![](/img/lsadump.lsa2.jpg)
 
 ##### LSADUMP::NETSYNC
 netsync提供了一个简单的方法，通过白银票据让一个DC的计算机账户的密码去模拟一个域控制器，然后通过DCSYNC来获取目标账户的信息，包括密码数据。
@@ -252,11 +252,11 @@ netsync提供了一个简单的方法，通过白银票据让一个DC的计算�
 需要system或者debug权限
 SAM包含用户密码的NTLM,部分LM HASH，该文件可以在线（需要system用户的token）或者离线工作（需要system权限和SAM HIVES文件或者备份）。
 需要administrator权限（debug）或者本地system权限来运行在线SAM服务
-![](../img/lsadump.sam1.jpg)
+![](/img/lsadump.sam1.jpg)
 
 ##### LSADUMP::SECRETS	-	获取syskey来解密SECRETS条目
 需要system或者debug权限
-![](../img/lsadump.secrets.jpg)
+![](/img/lsadump.secrets.jpg)
 
 ##### LSADUMP::TRUST	-	请求LSA server检索信任身份验证信息
 需要system或者debug权限
@@ -276,11 +276,11 @@ mimikatz的MISC模块包含了很多不太适合其他一些应用场景的命�
 
 ##### MISC::DETOURS - 尝试使用Detours-like hooks列举所有的模块
 需要管理员权限
-![](../img/misc.detours.jpg)
+![](/img/misc.detours.jpg)
 
 ##### MISC::MemSSP - 通过一个新的SSP给内存里的LSASS进程打补丁，注入一个恶意的SSP来记录本地登录授权的凭证，该操作不需要重启，重启后会清除mimikatz注入的memssp。
 需要管理员权限，详细内容请看[post on Mimikatz SSP describes in-memory patching as well as more persistent SSP techniques](https://adsecurity.org/?p=1760)
-![](../img/misc.memssp.jpg)
+![](/img/misc.memssp.jpg)
 
 
 ##### MISC::ncroutemon - juiper管理器（没有DisableTaskMgr）
@@ -289,7 +289,7 @@ mimikatz的MISC模块包含了很多不太适合其他一些应用场景的命�
 
 ##### MISC::Skeleton - 在域控制器上注入一个Sekeleton key到LSASS进程
 需要管理员权限，该操作给DC打补丁，让所有用户可以通过Master password（Skeleton key）和他们常用的密码进行验证
-![](../img/misc.skeleton.jpg)
+![](/img/misc.skeleton.jpg)
 
 ##### MISC::TASKMGR - 打开任务管理器
 需要管理员权限
@@ -299,7 +299,7 @@ mimikatz的MISC模块包含了很多不太适合其他一些应用场景的命�
 
 ### 8.NET
 ##### NET::user - 列出用户名及所属组
-![](../img/net.user.jpg)
+![](/img/net.user.jpg)
 
 ##### NET::GROUP
 ##### NET::LOCALGROUP
@@ -333,22 +333,22 @@ SEKURLSA模块与受保护的内存进行交互，从运行在内存中的LSASS�
 需要管理员权限，debug权限，或者通过`token::elevate`提升到system权限。如果运行的是dump下来的lsass进程文件，则不需要提权。
 
 ##### SEKURLSA::BACKUPKEYS - 获取首选的备份主密钥
-![](../img/sekurlsa.backupkeys.png)
+![](/img/sekurlsa.backupkeys.png)
 
 ##### SEKURLSA::Credman - 列出凭证管理器
-![](../img/sekurlsa.credman.png)
+![](/img/sekurlsa.credman.png)
 
 ##### SEKURLSA::Dpapi - 列出缓存的masterkeys
-![](../img/sekurlsa.dpapi.png)
+![](/img/sekurlsa.dpapi.png)
 
 ##### SEKURLSA::DpapiSystem - DPAPI_SYSTEM secret
-![](../img/sekurlsa.dpapisystem.png)
+![](/img/sekurlsa.dpapisystem.png)
 
 ##### SEKURLSA::EKEYS - 列出Kerberos加密密钥
-![](../img/sekurlsa.ekeys.png)
+![](/img/sekurlsa.ekeys.png)
 
 ##### SEKURLSA::KERBEROS - 列出已授权验证用户的Kerberos凭证信息（包括电脑账户和服务账户）
-![](../img/sekurlsa.kerberos.png)
+![](/img/sekurlsa.kerberos.png)
 
 ##### SEKURLSA::krbtgt - 获取域Kerberos服务账号的密码数据
 
