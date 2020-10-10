@@ -2,6 +2,7 @@
 title: hexo博客的备份和恢复
 date: 2019-07-07 13:26:09
 tags:
+- hexo
 ---
 
 1.先把github上的博客repo克隆下来

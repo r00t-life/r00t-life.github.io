@@ -1,7 +1,9 @@
 ---
 title: 子域名接管漏洞
 date: 2018-12-14 05:43:49
-tags: dns sec
+tags:
+- dns
+- sec
 ---
 
 

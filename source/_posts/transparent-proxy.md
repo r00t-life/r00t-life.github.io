@@ -1,7 +1,10 @@
 ---
 title: 使用openwrt搭建上网网关
 date: 2019-07-07 10:23:21
-tags: ssr, iptables, openwrt, proxy
+tags: 
+- ssr
+- iptables
+- openwrt
 ---
 
 

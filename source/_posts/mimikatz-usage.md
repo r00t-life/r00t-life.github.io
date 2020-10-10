@@ -1,7 +1,9 @@
 ---
 title: mimikatz常用命令
 date: 2017-07-30 19:45:41
-tags: mimikatz, adsec
+tags: 
+- mimikatz
+- adsec
 ---
 
 ### mimikatz的一些常用模块

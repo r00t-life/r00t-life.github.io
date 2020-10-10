@@ -1,7 +1,9 @@
 ---
 title: 用mimikatz获取chrome的用户数据
 date: 2019-07-07 15:45:29
-tags: pentest
+tags: 
+- pentest
+- sec
 ---
 
 

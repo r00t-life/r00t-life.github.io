@@ -1,7 +1,8 @@
 ---
 title: JAVASCRIPT 原型链污染
 date: 2018-12-12 04:09:27
-tags: javascript
+tags: 
+- javascript
 ---
 
 ### 原型和原型链
