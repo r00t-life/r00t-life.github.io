@@ -10,13 +10,14 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="子域名接管漏洞">
 <meta property="og:url" content="http://yoursite.com/2018/12/14/subdomain-takeover/index.html">
-<meta property="og:site_name" content="Code Life">
+<meta property="og:site_name" content="学习记录">
 <meta property="og:description" content="CNAME子域名接管这个漏洞的成因，主要是因为域名（源域名）配置了CNAME，但是CNAME指向的域名并没有被注册。那么攻击者可以注册这个CNAME指向的域名，就可以控制了源域名 这样攻击者就可以绕过HttpOnly和Secure Cookie的安全配置，盗取用户的cookie，CNAME子域名接管的整个流程如下： 1. 源域名(sub.example.com)设置了一个CNAME，CNAMED指">
 <meta property="og:locale">
 <meta property="article:published_time" content="2018-12-13T21:43:49.000Z">
-<meta property="article:modified_time" content="2020-10-09T00:22:07.628Z">
+<meta property="article:modified_time" content="2020-10-10T12:39:26.917Z">
 <meta property="article:author" content="lex">
-<meta property="article:tag" content="dns sec">
+<meta property="article:tag" content="dns">
+<meta property="article:tag" content="sec">
 <meta name="twitter:card" content="summary">
     
     
@@ -69,7 +70,9 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="/projects_url">Projects</a></li>
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
         
       </ul>
     </span>
@@ -127,7 +130,7 @@
 
     <div class="meta">
       <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">Code Life</span>
+        <span itemprop="name">学习记录</span>
       </span>
       
     <div class="postdate">
@@ -143,7 +146,7 @@
       
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link-link" href="/tags/dns-sec/" rel="tag">dns sec</a>
+        <a class="tag-link-link" href="/tags/dns/" rel="tag">dns</a>, <a class="tag-link-link" href="/tags/sec/" rel="tag">sec</a>
     </div>
 
 
@@ -182,7 +185,9 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="/projects_url">Projects</a></li>
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
         
       </ul>
     </div>
@@ -237,7 +242,9 @@
          
           <li><a href="/archives/">Writing</a></li>
          
-          <li><a href="/projects_url">Projects</a></li>
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
         
       </ul>
     </nav>
