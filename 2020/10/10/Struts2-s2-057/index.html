@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://yoursite.com/img/s2-057/1602256066225-st2.png">
 <meta property="og:image" content="http://yoursite.com/img/s2-057/1602256220632-uwb.png">
 <meta property="article:published_time" content="2020-10-10T12:51:11.000Z">
-<meta property="article:modified_time" content="2020-10-10T13:23:33.067Z">
+<meta property="article:modified_time" content="2020-10-17T16:34:01.372Z">
 <meta property="article:author" content="lex">
 <meta property="article:tag" content="CVE">
 <meta property="article:tag" content="RCE">
@@ -100,6 +100,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" href="/2020/10/18/CVE-2019-0230-S2-059/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" href="/2019/07/07/mimikatz-read-chrome-data/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
@@ -176,7 +178,7 @@
   <div class="content" itemprop="articleBody">
     <h3 id="漏洞成因"><a href="#漏洞成因" class="headerlink" title="漏洞成因"></a>漏洞成因</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">该漏洞是由于在Struts2开发框架中使用namespace功能定义XML配置时，namespace值未被设置且在上层动作配置（Action Configuration）中未设置或用通配符namespace，可能导致远程代码执行。同理，url标签未设置value和action值且上层动作未设置或用通配符namespace时也可能导致远程代码执行</span><br></pre></td></tr></table></figure>
 
-<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>下载 <a target="_blank" rel="noopener" href="https://archive.apache.org/dist/struts/2.5.16/struts-2.5.16-all.zip">https://archive.apache.org/dist/struts/2.5.16/struts-2.5.16-all.zip</a></p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>下载 <code>https://archive.apache.org/dist/struts/2.5.16/struts-2.5.16-all.zip</code></p>
 <p>使用IDEA来搭建环境<br>首先解压zip包，然后到apps目录下，解压war包，把解压好后目录结构如图：<br><img src="/img/s2-057/1600964363620-2on.png" alt="2on"></p>
 <p>接着在IDEA中创建一个webapp的项目，然后把showcase/WEB-INF/中的文件拷贝到IDEA的web/WEB-INF/目录下<br><img src="/img/s2-057/1600964427955-sdr.png" alt="sdr"></p>
 <p>接着把showcase/下面的其他目录拷贝到IDEA的web目录下，然后进入showcase/WEB-INF/src/java/目录，把文件拷贝到IDEA的src/目录下<br>然后再到IDEA中设置lib包的位置，lib包就在IDEA的WEB-INF/lib目录下，这样环境就配置好了</p>
