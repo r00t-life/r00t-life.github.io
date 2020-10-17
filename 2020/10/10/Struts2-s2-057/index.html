@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="漏洞成因1该漏洞是由于在Struts2开发框架中使用namespace功能定义XML配置时，namespace值未被设置且在上层动作配置（Action Configuration）中未设置或用通配符namespace，可能导致远程代码执行。同理，url标签未设置value和action值且上层动作未设置或用通配符namespace时也可能导致远程代码执行  环境搭建下载 https:&#x2F;&#x2F;archi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Struts2 s2-057">
+<meta property="og:title" content="CVE-2018-11776 S2-057">
 <meta property="og:url" content="http://yoursite.com/2020/10/10/Struts2-s2-057/index.html">
 <meta property="og:site_name" content="学习记录">
 <meta property="og:description" content="漏洞成因1该漏洞是由于在Struts2开发框架中使用namespace功能定义XML配置时，namespace值未被设置且在上层动作配置（Action Configuration）中未设置或用通配符namespace，可能导致远程代码执行。同理，url标签未设置value和action值且上层动作未设置或用通配符namespace时也可能导致远程代码执行  环境搭建下载 https:&#x2F;&#x2F;archi">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://yoursite.com/img/s2-057/1602256066225-st2.png">
 <meta property="og:image" content="http://yoursite.com/img/s2-057/1602256220632-uwb.png">
 <meta property="article:published_time" content="2020-10-10T12:51:11.000Z">
-<meta property="article:modified_time" content="2020-10-17T16:34:01.372Z">
+<meta property="article:modified_time" content="2020-10-17T17:00:19.282Z">
 <meta property="article:author" content="lex">
 <meta property="article:tag" content="CVE">
 <meta property="article:tag" content="RCE">
@@ -59,7 +59,7 @@
         
     
     <!-- title -->
-    <title>Struts2 s2-057</title>
+    <title>CVE-2018-11776 S2-057</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -118,16 +118,16 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&text=Struts2 s2-057"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&is_video=false&description=Struts2 s2-057"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Struts2 s2-057&body=Check out this article: http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&name=Struts2 s2-057&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/10/10/Struts2-s2-057/&t=Struts2 s2-057"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&text=CVE-2018-11776 S2-057"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&is_video=false&description=CVE-2018-11776 S2-057"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CVE-2018-11776 S2-057&body=Check out this article: http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&name=CVE-2018-11776 S2-057&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/10/10/Struts2-s2-057/&t=CVE-2018-11776 S2-057"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -144,7 +144,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        Struts2 s2-057
+        CVE-2018-11776 S2-057
     </h1>
 
 
@@ -180,73 +180,73 @@
 
 <h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>下载 <code>https://archive.apache.org/dist/struts/2.5.16/struts-2.5.16-all.zip</code></p>
 <p>使用IDEA来搭建环境<br>首先解压zip包，然后到apps目录下，解压war包，把解压好后目录结构如图：<br><img src="/img/s2-057/1600964363620-2on.png" alt="2on"></p>
-<p>接着在IDEA中创建一个webapp的项目，然后把showcase/WEB-INF/中的文件拷贝到IDEA的web/WEB-INF/目录下<br><img src="/img/s2-057/1600964427955-sdr.png" alt="sdr"></p>
-<p>接着把showcase/下面的其他目录拷贝到IDEA的web目录下，然后进入showcase/WEB-INF/src/java/目录，把文件拷贝到IDEA的src/目录下<br>然后再到IDEA中设置lib包的位置，lib包就在IDEA的WEB-INF/lib目录下，这样环境就配置好了</p>
-<p>要触发漏洞，需要修改struts-actionchaining.xml配置文件，从上面的描述，需要吧namespace给去掉，或者配置成通配符</p>
+<p>接着在IDEA中创建一个<code>webapp</code>的项目，然后把<code>showcase/WEB-INF/</code>中的文件拷贝到IDEA的<code>web/WEB-INF/</code>目录下<br><img src="/img/s2-057/1600964427955-sdr.png" alt="sdr"></p>
+<p>接着把<code>showcase/</code>下面的其他目录拷贝到IDEA的<code>web</code>目录下，然后进入<code>showcase/WEB-INF/src/java/</code>目录，把文件拷贝到IDEA的<code>src/</code>目录下<br>然后再到IDEA中设置lib包的位置，lib包就在IDEA的<code>WEB-INF/lib</code>目录下，这样环境就配置好了</p>
+<p>要触发漏洞，需要修改 <code>struts-actionchaining.xml</code>配置文件，从上面的描述，需要吧<code>namespace</code>给去掉，或者配置成通配符</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;struts&gt;</span><br><span class="line">    &lt;package name&#x3D;&quot;actionchaining&quot; extends&#x3D;&quot;struts-default&quot;&gt;</span><br><span class="line">        &lt;action name&#x3D;&quot;actionChain1&quot; class&#x3D;&quot;org.apache.struts2.showcase.actionchaining.ActionChain1&quot;&gt;</span><br><span class="line">            &lt;result type&#x3D;&quot;redirectAction&quot;&gt;</span><br><span class="line">                &lt;param name &#x3D; &quot;actionName&quot;&gt;register2&lt;&#x2F;param&gt;</span><br><span class="line">            &lt;&#x2F;result&gt;</span><br><span class="line">        &lt;&#x2F;action&gt;</span><br><span class="line">    &lt;&#x2F;package&gt;</span><br><span class="line">&lt;&#x2F;struts&gt;</span><br></pre></td></tr></table></figure>
 
-<p>访问网址进行测试：<br>在url中访问site/${(100*100)}/actionChain1.action<br><img src="/img/s2-057/1600964785790-vpo.png" alt="vpo"></p>
+<p>访问网址进行测试：<br>在url中访问 <code>site/$&#123;(100*100)&#125;/actionChain1.action</code><br><img src="/img/s2-057/1600964785790-vpo.png" alt="vpo"></p>
 <p>从hackbar中，我们注入了表达式，表达式被成功执行，此时浏览器的地址栏显示地址为10000/register2.action<br>该漏洞的触发方式有3种，chain, redirectAction, postback：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">struts-default.xml文件：</span><br><span class="line">&lt;result-types&gt;</span><br><span class="line">            &lt;result-type name&#x3D;&quot;chain&quot; class&#x3D;&quot;com.opensymphony.xwork2.ActionChainResult&quot;&#x2F;&gt;</span><br><span class="line">            &lt;result-type name&#x3D;&quot;redirectAction&quot; class&#x3D;&quot;org.apache.struts2.result.ServletActionRedirectResult&quot;&#x2F;&gt;</span><br><span class="line">            &lt;result-type name&#x3D;&quot;postback&quot; class&#x3D;&quot;org.apache.struts2.result.PostbackResult&quot; &#x2F;&gt;</span><br><span class="line">        &lt;&#x2F;result-types&gt;</span><br></pre></td></tr></table></figure>
 
 <p>在<code>DefaultActionMapper.parseNameAndNamespace</code>函数处下断点,，截取部分代码，访问url</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">protected void parseNameAndNamespace(String uri, ActionMapping mapping, ConfigurationManager configManager) &#123;</span><br><span class="line">        int lastSlash &#x3D; uri.lastIndexOf(47);</span><br><span class="line">        String namespace;    &#x2F;&#x2F;namespace: &quot;&#x2F;$&#123;(10*10)&#125;&quot;</span><br><span class="line">        String name;        &#x2F;&#x2F;name: &quot;actionChain1&quot;</span><br><span class="line">        if (lastSlash &#x3D;&#x3D; -1) &#123;</span><br><span class="line">            namespace &#x3D; &quot;&quot;;</span><br><span class="line">            name &#x3D; uri;</span><br><span class="line">        &#125; else if (lastSlash &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            namespace &#x3D; &quot;&#x2F;&quot;;</span><br><span class="line">            name &#x3D; uri.substring(lastSlash + 1);</span><br><span class="line">        &#125; else if (this.alwaysSelectFullNamespace) &#123;    &#x2F;&#x2F;true</span><br><span class="line">            namespace &#x3D; uri.substring(0, lastSlash);</span><br><span class="line">            name &#x3D; uri.substring(lastSlash + 1);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            Configuration config &#x3D; configManager.getConfiguration();</span><br><span class="line">            String prefix &#x3D; uri.substring(0, lastSlash);</span><br><span class="line">            namespace &#x3D; &quot;&quot;;</span><br><span class="line">            boolean rootAvailable &#x3D; false;</span><br><span class="line">            Iterator i$ &#x3D; config.getPackageConfigs().values().iterator();</span><br><span class="line"></span><br><span class="line">            while(i$.hasNext()) &#123;</span><br><span class="line">                PackageConfig cfg &#x3D; (PackageConfig)i$.next();</span><br><span class="line">                String ns &#x3D; cfg.getNamespace();</span><br><span class="line">                if (ns !&#x3D; null &amp;&amp; prefix.startsWith(ns) &amp;&amp; (prefix.length() &#x3D;&#x3D; ns.length() || prefix.charAt(ns.length()) &#x3D;&#x3D; &#39;&#x2F;&#39;) &amp;&amp; ns.length() &gt; namespace.length()) &#123;</span><br><span class="line">                    namespace &#x3D; ns;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                if (&quot;&#x2F;&quot;.equals(ns)) &#123;</span><br><span class="line">                    rootAvailable &#x3D; true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            name &#x3D; uri.substring(namespace.length() + 1);</span><br><span class="line">            if (rootAvailable &amp;&amp; &quot;&quot;.equals(namespace)) &#123;</span><br><span class="line">                namespace &#x3D; &quot;&#x2F;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (!this.allowSlashesInActionNames) &#123;</span><br><span class="line">            int pos &#x3D; name.lastIndexOf(47);</span><br><span class="line">            if (pos &gt; -1 &amp;&amp; pos &lt; name.length() - 1) &#123;</span><br><span class="line">                name &#x3D; name.substring(pos + 1);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        mapping.setNamespace(namespace);</span><br><span class="line">        mapping.setName(this.cleanupActionName(name));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>在进入函数后，可以看到alwaysSelectFullNamespace = true，那么namespace就是我们可以控制的输入点</p>
+<p>在进入函数后，可以看到<code>alwaysSelectFullNamespace = true</code>，那么<code>namespace</code>就是我们可以控制的输入点</p>
 <p><img src="/img/s2-057/1601217508135-ocf.png" alt="ocf"></p>
-<p>接着namespace保存到ActionMapping对象中，交由函数parseActionName来进行处理<br><img src="/img/s2-057/1601217639825-sga.png" alt="1601217639825-sga.png"></p>
-<p>在parseNameAndNamespace处理完之后，会调用到DefaultActionInvocation类的executeResult()函数来进行处理，该函数用来决定此时程序是用什么样的方式来处理action，比如如下所示的则为使用ActionChainResult类来做处理，也就是chain的方式</p>
+<p>接着<code>namespace</code>保存到ActionMapping对象中，交由函数<code>parseActionName</code>来进行处理<br><img src="/img/s2-057/1601217639825-sga.png" alt="1601217639825-sga.png"></p>
+<p>在<code>parseNameAndNamespace</code>处理完之后，会调用到<code>DefaultActionInvocation</code>类的<code>executeResult()</code>函数来进行处理，该函数用来决定此时程序是用什么样的方式来处理action，比如如下所示的则为使用<code>ActionChainResult</code>类来做处理，也就是<code>chain</code>的方式</p>
 <p><img src="/img/s2-057/1602252632703-mon.png" alt="1602252632703-mon.png"></p>
-<h3 id="Redirect-Action-攻击面"><a href="#Redirect-Action-攻击面" class="headerlink" title="Redirect Action 攻击面"></a>Redirect Action 攻击面</h3><p>在使用Redirect Action来触发漏洞的时候，会使用ServletActionRedirectResult来进行处理</p>
+<h3 id="Redirect-Action-攻击面"><a href="#Redirect-Action-攻击面" class="headerlink" title="Redirect Action 攻击面"></a>Redirect Action 攻击面</h3><p>在使用<code>Redirect Action</code>来触发漏洞的时候，会使用<code>ServletActionRedirectResult</code>来进行处理</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Object</span><br><span class="line">     org.apache.struts2.result.StrutsResultSupport</span><br><span class="line">          org.apache.struts2.result.ServletRedirectResult</span><br><span class="line">               org.apache.struts2.result.ServletActionRedirectResult </span><br></pre></td></tr></table></figure>
-<p>因为在struts-actionchaining.xml文件中没有设置namespace，所以此处的namespace为null<br><img src="/img/s2-057/1601218126073-axz.png" alt="1601218126073-axz.png"></p>
-<p>然后步入函数invocation.getProxy().getNamespace()<br>invocation.getProxy()实际上调用了DefaultActionProxy类的getNamespace方法</p>
+<p>因为在<code>struts-actionchaining.xml</code>文件中没有设置<code>namespace</code>，所以此处的<code>namespace</code>为<code>null</code><br><img src="/img/s2-057/1601218126073-axz.png" alt="1601218126073-axz.png"></p>
+<p>然后步入函数<code>invocation.getProxy().getNamespace()</code><br><code>invocation.getProxy()</code>实际上调用了<code>DefaultActionProxy</code>类的<code>getNamespace</code>方法</p>
 <p><img src="/img/s2-057/1601218473662-6c6.png" alt="1601218473662-6c6.png"></p>
-<p>调用完成后，可以看到namespace变为了输入点的内容</p>
+<p>调用完成后，可以看到<code>namespace</code>变为了输入点的内容</p>
 <p><img src="/img/s2-057/1601218535664-7sb.png" alt="1601218535664-7sb.png"></p>
-<p>接着到 super.execute() 函数这里的时候，跟进函数内部，接着继续跟进，然后就会跳到StrutsResultSupport类的execute函数进行处理</p>
+<p>接着到 <code>super.execute()</code> 函数这里的时候，跟进函数内部，接着继续跟进，然后就会跳到<code>StrutsResultSupport</code>类的<code>execute</code>函数进行处理</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void execute(ActionInvocation invocation) throws Exception &#123;</span><br><span class="line">        this.lastFinalLocation &#x3D; this.conditionalParse(this.location, invocation);    &#x2F;&#x2F;$&#123;(10*10)&#125;&#x2F;register2.action</span><br><span class="line">        this.doExecute(this.lastFinalLocation, invocation);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p><img src="/img/s2-057/1601219207004-vlq.png" alt="1601219207004-vlq.png"></p>
-<p>此时location为要跳转的url地址，跟进去看看是如何处理的</p>
+<p>此时<code>location</code>为要跳转的url地址，跟进去看看是如何处理的</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">protected String conditionalParse(String param, ActionInvocation invocation) &#123;</span><br><span class="line">        return this.parse &amp;&amp; param !&#x3D; null &amp;&amp; invocation !&#x3D; null ? TextParseUtil.translateVariables(param, invocation.getStack(), new StrutsResultSupport.EncodingParsedValueEvaluator()) : param;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>此时调用了TextParseUtil.translateVariables，跟进</p>
+<p>此时调用了<code>TextParseUtil.translateVariables</code>，跟进</p>
 <p><img src="/img/s2-057/1601219531298-jf2.png" alt="1601219531298-jf2.png"></p>
-<p>此时的stack为ognlvalueStack，接着再跟进函数translateVariables</p>
+<p>此时的stack为<code>ognlvalueStack</code>，接着再跟进函数<code>translateVariables</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static String translateVariables(String expression, ValueStack stack, TextParseUtil.ParsedValueEvaluator evaluator) &#123;</span><br><span class="line">        return translateVariables(new char[]&#123;&#39;$&#39;, &#39;%&#39;&#125;, expression, stack, String.class, evaluator).toString();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>此时<br>expression = /${(10*10)}/register2.action<br>evaluator对象的值为：</p>
+<p>此时<br><code>expression = /$&#123;(10*10)&#125;/register2.action</code><br><code>evaluator</code>对象的值为：</p>
 <p><img src="/img/s2-057/1601219837029-35p.png" alt="1601219837029-35p.png"></p>
 <p>跟进后调用的函数</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static Object translateVariables(char[] openChars, String expression, final ValueStack stack, final Class asType, final TextParseUtil.ParsedValueEvaluator evaluator, int maxLoopCount) &#123;</span><br><span class="line">        TextParseUtil.ParsedValueEvaluator ognlEval &#x3D; new TextParseUtil.ParsedValueEvaluator() &#123;</span><br><span class="line">            public Object evaluate(String parsedValue) &#123;</span><br><span class="line">                Object o &#x3D; stack.findValue(parsedValue, asType);</span><br><span class="line">                if (evaluator !&#x3D; null &amp;&amp; o !&#x3D; null) &#123;</span><br><span class="line">                    o &#x3D; evaluator.evaluate(o.toString());</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                return o;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        TextParser parser &#x3D; (TextParser)((Container)stack.getContext().get(&quot;com.opensymphony.xwork2.ActionContext.container&quot;)).getInstance(TextParser.class);</span><br><span class="line">        return parser.evaluate(openChars, expression, ognlEval, maxLoopCount);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>函数创建了一个ognleval对象，并且传入了parser.evaluate</p>
+<p>函数创建了一个<code>ognleval</code>对象，并且传入了<code>parser.evaluate</code></p>
 <p><img src="/img/s2-057/1601220112230-276.png" alt="1601220112230-276.png"></p>
-<p>在经过一系列的运算解析之后，返回到StrutsResultSupport类的execute方法，此时我们可以看到，this.lastFinalLocation的值已经改变</p>
+<p>在经过一系列的运算解析之后，返回到<code>StrutsResultSupport</code>类的<code>execute</code>方法，此时我们可以看到，<code>this.lastFinalLocation</code>的值已经改变</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void execute(ActionInvocation invocation) throws Exception &#123;</span><br><span class="line">        this.lastFinalLocation &#x3D; this.conditionalParse(this.location, invocation);</span><br><span class="line">        this.doExecute(this.lastFinalLocation, invocation);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p><img src="/img/s2-057/1601220475808-ti3.png" alt="1601220475808-ti3.png"></p>
-<p>此时注入的表达式已经被成功执行。从上面的分析可以看出，漏洞的主要成因在2个点上，先是alwaysSelectFullNamespace设置为true，所以namespace从url获取，也就是payload的输入点，其次是xml文件中namespace为null，否则就不会用用户的输入作为namespace，那么漏洞就没法触发。</p>
-<h3 id="Action-Chaining-攻击面"><a href="#Action-Chaining-攻击面" class="headerlink" title="Action Chaining 攻击面"></a>Action Chaining 攻击面</h3><p>首先把struts-actionchaining.xml文件进行修改，把result type 改成 chain，要修改的文件</p>
+<p>此时注入的表达式已经被成功执行。从上面的分析可以看出，漏洞的主要成因在2个点上，先是<code>alwaysSelectFullNamespace</code>设置为<code>true</code>，所以<code>namespace</code>从url获取，也就是<code>payload</code>的输入点，其次是<code>xml</code>文件中<code>namespace</code>为null，否则就不会用用户的输入作为<code>namespace</code>，那么漏洞就没法触发。</p>
+<h3 id="Action-Chaining-攻击面"><a href="#Action-Chaining-攻击面" class="headerlink" title="Action Chaining 攻击面"></a>Action Chaining 攻击面</h3><p>首先把<code>struts-actionchaining.xml</code>文件进行修改，把<code>result type</code> 改成 <code>chain</code>，要修改的文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&gt; find . -name &quot;struts-actionchaining.xml&quot;</span><br><span class="line">.&#x2F;web&#x2F;WEB-INF&#x2F;src&#x2F;java&#x2F;struts-actionchaining.xml</span><br><span class="line">.&#x2F;web&#x2F;WEB-INF&#x2F;classes&#x2F;struts-actionchaining.xml</span><br><span class="line">.&#x2F;src&#x2F;struts-actionchaining.xml</span><br><span class="line">.&#x2F;out&#x2F;production&#x2F;s2-057&#x2F;struts-actionchaining.xml</span><br><span class="line">.&#x2F;out&#x2F;artifacts&#x2F;s2_057_war_exploded&#x2F;WEB-INF&#x2F;src&#x2F;java&#x2F;struts-actionchaining.xml</span><br><span class="line">.&#x2F;out&#x2F;artifacts&#x2F;s2_057_war_exploded&#x2F;WEB-INF&#x2F;classes&#x2F;struts-actionchaining.xml</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;action name&#x3D;&quot;actionChain1&quot; class&#x3D;&quot;org.apache.struts2.showcase.actionchaining.ActionChain1&quot;&gt;</span><br><span class="line">            &lt;result type&#x3D;&quot;chain&quot;&gt;</span><br><span class="line">                &lt;param name&#x3D;&quot;actionName&quot;&gt;register2&lt;&#x2F;param&gt;</span><br><span class="line">            &lt;&#x2F;result&gt;</span><br><span class="line">        &lt;&#x2F;action&gt;</span><br></pre></td></tr></table></figure>
 
-<p>使用chain的方式，会调用 com.opensymphony.xworks2.ActionChainResult.execute() 方法来进行处理，在该函数下断点</p>
+<p>使用<code>chain</code>的方式，会调用 <code>com.opensymphony.xworks2.ActionChainResult.execute()</code> 方法来进行处理，在该函数下断点</p>
 <p><img src="/img/s2-057/1602252766614-4hr.png" alt="1602252766614-4hr.png"></p>
-<p>当namespace为null的时候，则会调用invocation.getProxy().getNamespace()去获取namespace，获取到namespace后，经过TextParseUtil.translateVariable函数处理之后，namespace进行了表达式运算，从 /${(100*100)} ==&gt; /10000，这样漏洞就触发了。</p>
-<h3 id="PostBack-Result-攻击面"><a href="#PostBack-Result-攻击面" class="headerlink" title="PostBack Result 攻击面"></a>PostBack Result 攻击面</h3><p>先修改struts-actionchaining.xml文件</p>
+<p>当<code>namespace</code>为<code>null</code>的时候，则会调用<code>invocation.getProxy().getNamespace()</code>去获取<code>namespace</code>，获取到<code>namespace</code>后，经过<code>TextParseUtil.translateVariable</code>函数处理之后，<code>namespace</code>进行了表达式运算，从 <code>/$&#123;(100*100)&#125; ==&gt; /10000</code>，这样漏洞就触发了。</p>
+<h3 id="PostBack-Result-攻击面"><a href="#PostBack-Result-攻击面" class="headerlink" title="PostBack Result 攻击面"></a>PostBack Result 攻击面</h3><p>先修改<code>struts-actionchaining.xml</code>文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;result type&#x3D;&quot;postback&quot;&gt;</span><br><span class="line">    &lt;param name &#x3D; &quot;actionName&quot;&gt;register2&lt;&#x2F;param&gt;</span><br><span class="line">&lt;&#x2F;result&gt;</span><br></pre></td></tr></table></figure>
 
-<p>从上面得知该方式使用了org.apache.struts2.result.PostbackResult.execute()函数来做处理，在该函数下段点，在DefaultActionInvocation类中可以看到具体调用到了PostbackResult类来做处理</p>
+<p>从上面得知该方式使用了<code>org.apache.struts2.result.PostbackResult.execute()</code>函数来做处理，在该函数下段点，在<code>DefaultActionInvocation</code>类中可以看到具体调用到了<code>PostbackResult</code>类来做处理</p>
 <p><img src="/img/s2-057/1602255817968-jrx.png" alt="1602255817968-jrx.png"></p>
-<p>跟进到PostbackResult.execute()</p>
+<p>跟进到<code>PostbackResult.execute()</code></p>
 <p><img src="/img/s2-057/1602255841276-tkh.png" alt="1602255841276-tkh.png"></p>
-<p>继续跟进 this.makePostbackUri函数，可以看到namespace为null，也是通过invocation.getProxy().getNamespace()函数来获取namespace的</p>
+<p>继续跟进 <code>this.makePostbackUri</code> 函数，可以看到<code>namespace</code>为<code>null</code>，也是通过<code>invocation.getProxy().getNamespace()</code>函数来获取<code>namespace</code>的</p>
 <p><img src="/img/s2-057/1602255965997-hrc.png" alt="1602255965997-hrc.png"></p>
 <p>处理完成后</p>
 <p><img src="/img/s2-057/1602256066225-st2.png" alt="1602256066225-st2.png"></p>
-<p>接着就是调用super.execute函数，实际上调用了StrutsResultSupport.execute函数来做处理，也就和上面的Redirect Action的是一样的了</p>
+<p>接着就是调用<code>super.execute</code>函数，实际上调用了<code>StrutsResultSupport.execute</code>函数来做处理，也就和上面的<code>Redirect Action</code>的是一样的了</p>
 <p><img src="/img/s2-057/1602256220632-uwb.png" alt="1602256220632-uwb.png"></p>
 <p>表达式成功执行</p>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2618">https://xz.aliyun.com/t/2618</a></p>
@@ -284,16 +284,16 @@
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&text=Struts2 s2-057"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&is_video=false&description=Struts2 s2-057"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Struts2 s2-057&body=Check out this article: http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=Struts2 s2-057"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&name=Struts2 s2-057&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/10/10/Struts2-s2-057/&t=Struts2 s2-057"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&text=CVE-2018-11776 S2-057"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&is_video=false&description=CVE-2018-11776 S2-057"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CVE-2018-11776 S2-057&body=Check out this article: http://yoursite.com/2020/10/10/Struts2-s2-057/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&title=CVE-2018-11776 S2-057"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/10/10/Struts2-s2-057/&name=CVE-2018-11776 S2-057&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/10/10/Struts2-s2-057/&t=CVE-2018-11776 S2-057"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
