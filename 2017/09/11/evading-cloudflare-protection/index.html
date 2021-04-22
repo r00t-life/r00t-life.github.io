@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="1.老旧的cloudflare配置cloudflare有一个直连DNS记录:direct-connect ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希) 2.MX记录MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在越来越多的邮箱服务都是托管在云上。">
+    <meta name="description" content="2021.04.17 update1.老旧的cloudflare配置cloudflare有一个直连DNS记录:direct-connect ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希) 2.MX记录MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在">
 <meta property="og:type" content="article">
 <meta property="og:title" content="找到cloudflare背后的真实IP">
 <meta property="og:url" content="http://yoursite.com/2017/09/11/evading-cloudflare-protection/index.html">
 <meta property="og:site_name" content="学习记录">
-<meta property="og:description" content="1.老旧的cloudflare配置cloudflare有一个直连DNS记录:direct-connect ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希) 2.MX记录MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在越来越多的邮箱服务都是托管在云上。">
+<meta property="og:description" content="2021.04.17 update1.老旧的cloudflare配置cloudflare有一个直连DNS记录:direct-connect ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希) 2.MX记录MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在">
 <meta property="og:locale">
 <meta property="article:published_time" content="2017-09-11T13:56:44.000Z">
-<meta property="article:modified_time" content="2020-10-09T00:22:07.628Z">
+<meta property="article:modified_time" content="2021-04-17T01:46:37.085Z">
 <meta property="article:author" content="lex">
 <meta property="article:tag" content="cdn, web security">
 <meta name="twitter:card" content="summary">
@@ -110,7 +110,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#2021-04-17-update"><span class="toc-number">1.</span> <span class="toc-text">2021.04.17 update</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%80%81%E6%97%A7%E7%9A%84cloudflare%E9%85%8D%E7%BD%AE"><span class="toc-number"></span> <span class="toc-text">1.老旧的cloudflare配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-MX%E8%AE%B0%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">2.MX记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%90%E5%9F%9F%E5%90%8D"><span class="toc-number"></span> <span class="toc-text">3.子域名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-WEBSOCKET%E6%9C%8D%E5%8A%A1"><span class="toc-number"></span> <span class="toc-text">4.WEBSOCKET服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BB%A5%E5%89%8D%E7%9A%84DNS%E8%AE%B0%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">5.以前的DNS记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%A4%9A%E5%9C%B0PING"><span class="toc-number"></span> <span class="toc-text">6.多地PING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-SSRF"><span class="toc-number"></span> <span class="toc-text">7.SSRF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%8F%91%E9%82%AE%E4%BB%B6"><span class="toc-number"></span> <span class="toc-text">8.发邮件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-SSL%E8%AF%81%E4%B9%A6"><span class="toc-number"></span> <span class="toc-text">9.SSL证书</span></a>
     </div>
   </span>
 </div>
@@ -154,14 +154,21 @@
   
 
   <div class="content" itemprop="articleBody">
-    <p>1.老旧的cloudflare配置<br>cloudflare有一个直连DNS记录:<code>direct-connect</code> ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希)</p>
-<p>2.MX记录<br>MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在越来越多的邮箱服务都是托管在云上。如果目标使用的是office 365作为邮件服务器，那么可以到office 365上随便输入该网站一个不存在的邮箱，那么会自动跳转到目标的邮箱服务器。如果不存在，则提示没有这个ID；如果是托管，显示不变，也不跳转。</p>
-<p>3.子域名<br>FTP/SCP/VPN等子域名可能会暴露目标真实IP</p>
-<p>4.WEBSOCKET服务<br>cloudflare提供了针对websockets技术服务的访问，但是有些用户可能还不知道或者还未从自己的WS服务器上迁移过来。加上WS服务需要始终保持客户端服务端的连接，真实IP暴露的几率很大。</p>
-<p>5.以前的DNS记录<br>可以在<a target="_blank" rel="noopener" href="https://www.netcraft.com/%E7%BD%91%E7%AB%99%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%AB%99%E7%9A%84%E5%8E%86%E5%8F%B2%E7%BA%AA%E5%BD%95%EF%BC%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%8C%85%E5%90%AB%E7%9C%9F%E5%AE%9EIP%E5%9C%B0%E5%9D%80">https://www.netcraft.com/网站查询网站的历史纪录，可能会包含真实IP地址</a></p>
-<p>6.多地PING<br>目标可能购买的CDN服务没有覆盖全球，如果使用全球多个节点来ping，那么可能会得到真实的IP地址</p>
-<p>7.SSRF<br>如果目标存在SSRF漏洞，则可以对我们设置的服务器发起一个请求，在服务器上用NC监听，服务器接收到请求后即可输出目标的IP地址</p>
-<p>8.发邮件<br>给目标发送邮件，如果目标回复邮件，是不是可以得到目标的邮件服务器地址？</p>
+    <h4 id="2021-04-17-update"><a href="#2021-04-17-update" class="headerlink" title="2021.04.17 update"></a>2021.04.17 update</h4><h3 id="1-老旧的cloudflare配置"><a href="#1-老旧的cloudflare配置" class="headerlink" title="1.老旧的cloudflare配置"></a>1.老旧的cloudflare配置</h3><p>cloudflare有一个直连DNS记录:<code>direct-connect</code> ,可以直接访问目标网站？不过随着DDOS攻击的泛滥,现在cloudflare把这个’绕过子域名’替换成更加随机的域名(dc-######-随机的hex哈希)</p>
+<h3 id="2-MX记录"><a href="#2-MX记录" class="headerlink" title="2.MX记录"></a>2.MX记录</h3><p>MX记录一般会显示网站的邮箱服务器地址,基本上邮箱服务器地址都是目标的真实IP段,不过现在越来越多的邮箱服务都是托管在云上。如果目标使用的是office 365作为邮件服务器，那么可以到office 365上随便输入该网站一个不存在的邮箱，那么会自动跳转到目标的邮箱服务器。如果不存在，则提示没有这个ID；如果是托管，显示不变，也不跳转。</p>
+<h3 id="3-子域名"><a href="#3-子域名" class="headerlink" title="3.子域名"></a>3.子域名</h3><p>FTP/SCP/VPN等子域名可能会暴露目标真实IP<br>在线平台：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;ruo.me&#x2F;sub</span><br><span class="line">https:&#x2F;&#x2F;dnsdumpster.com</span><br></pre></td></tr></table></figure>
+<h3 id="4-WEBSOCKET服务"><a href="#4-WEBSOCKET服务" class="headerlink" title="4.WEBSOCKET服务"></a>4.WEBSOCKET服务</h3><p>cloudflare提供了针对websockets技术服务的访问，但是有些用户可能还不知道或者还未从自己的WS服务器上迁移过来。加上WS服务需要始终保持客户端服务端的连接，真实IP暴露的几率很大。</p>
+<h3 id="5-以前的DNS记录"><a href="#5-以前的DNS记录" class="headerlink" title="5.以前的DNS记录"></a>5.以前的DNS记录</h3><p>可以在[<a target="_blank" rel="noopener" href="https://www.netcraft.com/]%E7%AD%89%E7%BD%91%E7%AB%99%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%AB%99%E7%9A%84%E5%8E%86%E5%8F%B2%E7%BA%AA%E5%BD%95%EF%BC%8C%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%8C%85%E5%90%AB%E7%9C%9F%E5%AE%9EIP%E5%9C%B0%E5%9D%80">https://www.netcraft.com/]等网站查询网站的历史纪录，可能会包含真实IP地址</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;securitytrails.com</span><br><span class="line">https:&#x2F;&#x2F;completedns.com</span><br><span class="line">https:&#x2F;&#x2F;whoisrequest.com</span><br><span class="line">https:&#x2F;&#x2F;www.whoxy.com</span><br><span class="line">https:&#x2F;&#x2F;x.threatbook.cn</span><br><span class="line">https:&#x2F;&#x2F;viewdns.info</span><br><span class="line">https:&#x2F;&#x2F;reverse-ip.whoisxmlapi.com</span><br><span class="line">https:&#x2F;&#x2F;dnsdb.io</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-多地PING"><a href="#6-多地PING" class="headerlink" title="6.多地PING"></a>6.多地PING</h3><p>目标可能购买的CDN服务没有覆盖全球，如果使用全球多个节点来ping，那么可能会得到真实的IP地址</p>
+<h3 id="7-SSRF"><a href="#7-SSRF" class="headerlink" title="7.SSRF"></a>7.SSRF</h3><p>如果目标存在SSRF漏洞，则可以对我们设置的服务器发起一个请求，在服务器上用NC监听，服务器接收到请求后即可输出目标的IP地址</p>
+<h3 id="8-发邮件"><a href="#8-发邮件" class="headerlink" title="8.发邮件"></a>8.发邮件</h3><p>给一个不存在的邮箱发邮件，可以通过返回的信息查看到具体的IP，但是如果对方前段做了反垃圾邮件处理，那么有可能会收不到任何回信。<br>其他可能触发的点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">RSS订阅</span><br><span class="line">邮箱注册，激活</span><br><span class="line">邮箱密码找回</span><br><span class="line">产品更新推送</span><br><span class="line">业务执行通知</span><br></pre></td></tr></table></figure>
+<h3 id="9-SSL证书"><a href="#9-SSL证书" class="headerlink" title="9.SSL证书"></a>9.SSL证书</h3><p>可以使用openssl来连接，通过返回的信息进行确认</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl s_client -connect 1.2.3.4:443</span><br></pre></td></tr></table></figure>
+<p>也可以使用[censys.io]的证书搜索引擎进行搜索，通过证书sha1反查IP。</p>
 <p><a target="_blank" rel="noopener" href="https://rhinosecuritylabs.com/cloud-security/cloudflare-bypassing-cloud-security/">https://rhinosecuritylabs.com/cloud-security/cloudflare-bypassing-cloud-security/</a></p>
 
   </div>
@@ -190,7 +197,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#2021-04-17-update"><span class="toc-number">1.</span> <span class="toc-text">2021.04.17 update</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%80%81%E6%97%A7%E7%9A%84cloudflare%E9%85%8D%E7%BD%AE"><span class="toc-number"></span> <span class="toc-text">1.老旧的cloudflare配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-MX%E8%AE%B0%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">2.MX记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%90%E5%9F%9F%E5%90%8D"><span class="toc-number"></span> <span class="toc-text">3.子域名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-WEBSOCKET%E6%9C%8D%E5%8A%A1"><span class="toc-number"></span> <span class="toc-text">4.WEBSOCKET服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BB%A5%E5%89%8D%E7%9A%84DNS%E8%AE%B0%E5%BD%95"><span class="toc-number"></span> <span class="toc-text">5.以前的DNS记录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E5%A4%9A%E5%9C%B0PING"><span class="toc-number"></span> <span class="toc-text">6.多地PING</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-SSRF"><span class="toc-number"></span> <span class="toc-text">7.SSRF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%8F%91%E9%82%AE%E4%BB%B6"><span class="toc-number"></span> <span class="toc-text">8.发邮件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-SSL%E8%AF%81%E4%B9%A6"><span class="toc-number"></span> <span class="toc-text">9.SSL证书</span></a>
     </div>
 
     <div id="share-footer" style="display: none">

